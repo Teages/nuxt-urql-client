@@ -1,15 +1,17 @@
 import type { ClientPresetConfig } from '@graphql-codegen/client-preset'
 import type { CodegenConfig } from '@graphql-codegen/cli'
 
-import type { ClientOptions as UrqlCoreOptions } from '@urql/core'
+import type { ClientOptions as _ClientOptions } from '@urql/core'
 
-export interface UrqlClientOptions {
-  default?: UrqlCoreOptions | undefined
-  [key: string]: UrqlCoreOptions | undefined
+export interface UrqlModuleOptions {
+  clients: {
+    default?: UrqlClientOptions
+    [key: string]: UrqlClientOptions
+  }
 }
 
-export type ClientOptions = Omit<UrqlCoreOptions, 'fetch' | 'exchanges'> & {
-  exchanges?: UrqlCoreOptions['exchanges'] | (() => UrqlCoreOptions['exchanges'])
+export type UrqlClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges'> & {
+  exchanges?: _ClientOptions['exchanges'] | (() => _ClientOptions['exchanges'])
 
   /**
    * @description Replace fetch with nuxt built-in ofetch. Could provide better performance for full stack api.

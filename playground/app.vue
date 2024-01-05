@@ -1,8 +1,25 @@
 <script setup lang="ts">
+const { client, gql } = useUrql('default')
+
+const query = gql`
+  query latestFirm {
+    allFilms (first: 1) {
+      films {
+        title
+        created
+      }
+    }
+  }
+`
+
+const { data } = useAsyncData(async () => {
+  const { data } = await client.query(query, {}).toPromise()
+  return data
+})
 </script>
 
 <template>
   <div>
-    Nuxt module playground!
+    {{ data }}
   </div>
 </template>
