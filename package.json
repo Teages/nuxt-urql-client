@@ -28,8 +28,14 @@
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
+  "peerDependencies": {
+    "graphql": "^16.8.1"
+  },
   "dependencies": {
-    "@nuxt/kit": "^3.9.0"
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@nuxt/kit": "^3.9.0",
+    "@urql/core": "^4.2.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.1",
@@ -41,7 +47,9 @@
     "@types/node": "^20.10.6",
     "changelogen": "^0.5.5",
     "eslint": "^8.56.0",
+    "graphql": "^16.8.1",
     "nuxt": "^3.9.0",
+    "typescript": "^5.3.3",
     "vitest": "^1.1.2"
   }
 }
