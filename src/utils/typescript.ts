@@ -1,3 +1,4 @@
+import { addTemplate, addTypeTemplate } from '@nuxt/kit'
 import ts from 'typescript'
 
 /**
@@ -10,32 +11,48 @@ export function compileTs(
   const outputFiles: File[] = []
 
   const compilerHost = ts.createCompilerHost(compilerOptions)
+  compilerHost.readFile = filename => files.find(file => file.filename === filename)?.content
   compilerHost.writeFile = (filename, content) => {
-    outputFiles.push({ filename, content })
-  }
-  compilerHost.getSourceFile = (filename, languageVersion) => {
     const file = files.find(file => file.filename === filename)
     if (file) {
-      return ts.createSourceFile(filename, file.content, languageVersion)
+      file.content = content
+    }
+    else {
+      outputFiles.push({ filename, content })
     }
   }
 
-  const program = ts.createProgram(
-    files.map(file => file.filename),
-    compilerOptions,
-    compilerHost,
-  )
-  const emitResult = program.emit()
-  if (emitResult.emitSkipped) {
-    throw new Error(
-      emitResult.diagnostics
-        .map(diagnostic => diagnostic.messageText)
-        .join('\n'),
-    )
-  }
+  const program = ts.createProgram(files.map(file => file.filename), compilerOptions, compilerHost)
+  program.emit()
 
   return outputFiles
 }
+
+export function addTsTemplate(
+  file: {
+    filename: string
+    content: string
+  },
+) {
+  const res = compileTs([file], {
+    declaration: true,
+    module: ts.ModuleKind.ESNext,
+  })
+  const jsFile = res.find(file => file.filename.endsWith('.js'))
+  const dtsFile = res.find(file => file.filename.endsWith('.d.ts'))
+  if (!jsFile || !dtsFile) {
+    throw new Error('Failed to compile typescript')
+  }
+  addTemplate({
+    filename: jsFile.filename,
+    getContents: () => jsFile.content,
+  })
+  addTypeTemplate({
+    filename: dtsFile.filename,
+    getContents: () => dtsFile.content,
+  })
+}
+
 interface File {
   filename: string
   content: string

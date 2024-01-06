@@ -1,16 +1,15 @@
 import type { AnyVariables, CombinedError, DocumentInput } from '@urql/core'
-import { gql } from '@urql/core'
 import { hash } from 'ohash'
 import { type AsyncDataOptions, useAsyncData, useNuxtApp } from '#app'
+
+export { graphql as gql } from '#build/urql-client/gql'
 
 export function useUrql() {
   const app = useNuxtApp()
   const client = app.$urqlClients.default
 
-  return { client, gql }
+  return { client }
 }
-
-export { gql }
 
 export async function useQuery<Data = any, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Data, Variables>,

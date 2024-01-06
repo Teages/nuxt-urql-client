@@ -6,5 +6,11 @@ export default defineNuxtConfig({
         url: '/graphql',
       },
     },
+    codegen: {
+      schemaOverride: '../../../schema/schema.graphql',
+      watch: {
+        extra: ['./schema.graphql'],
+      },
+    },
   },
 })

@@ -14,14 +14,44 @@ export interface UrqlModuleOptions {
 
   /**
    * @description Setup the codegen of GraphQL operations.
-   * @default
-   * { useTypeImports: true }
+   * @default {}
    */
-  codegen?: false | ClientPresetConfig & {
+  codegen?: false | {
+    /**
+     * @description Override config of client preset.
+     *
+     * See https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#config-api
+     *
+     * @default
+     * { useTypeImports: true }
+     */
+    config?: Record<string, any>
+
+    /**
+     * @description Override preset config of client preset.
+     */
+    presetConfig?: ClientPresetConfig
+
     /**
      * @description Override the schema used for codegen. Will fetch the schema from the remote if not provided.
      */
     schemaOverride?: CodegenConfig['schema']
+
+    /**
+     * @description Override the documents used for codegen.
+     */
+    documentsOverride?: CodegenConfig['documents']
+
+    /**
+     * @description Rerun code generation when the app HMR.
+     * Only rerun when the file include `gql`, or the file in `watch.extra` list.
+     */
+    watch?: false | {
+      /**
+       * @description Regenerate code when the file changed.
+       */
+      extra?: string[]
+    }
   }
 }
 

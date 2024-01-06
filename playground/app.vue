@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const query = gql`
+const query = gql(`
   query test {
     hello(name: "Teages")
     cookie
     authorization
   }
-`
+`)
 
 const { data, error } = useAsyncQuery(query)
 </script>

@@ -13,6 +13,12 @@ export default defineNuxtConfig({
         },
       },
     },
+    codegen: {
+      schemaOverride: '../schema/schema.graphql',
+      watch: {
+        extra: ['./schema.graphql'],
+      },
+    },
   },
   devtools: { enabled: true },
 })

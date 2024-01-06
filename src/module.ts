@@ -1,5 +1,6 @@
 import { addImports, addPlugin, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import type { UrqlModuleOptions } from './options'
+import { setupCodegen } from './codegen'
 
 export default defineNuxtModule<UrqlModuleOptions>({
   meta: {
@@ -9,10 +10,11 @@ export default defineNuxtModule<UrqlModuleOptions>({
   defaults: {
     clients: {},
   },
-  setup(options, _nuxt) {
+  async setup(options, nuxt) {
     const logger = useLogger('urql-client')
     if (Object.keys(options.clients).length === 0) {
       logger.warn('No client is configured.')
+      options.codegen = false
     }
 
     const resolver = createResolver(import.meta.url)
@@ -34,6 +36,9 @@ export default defineNuxtModule<UrqlModuleOptions>({
         }`,
       ].join('\n'),
     })
+
+    // gql codegen
+    await setupCodegen(options, nuxt)
 
     addPlugin(resolver.resolve('./runtime/plugin'))
 

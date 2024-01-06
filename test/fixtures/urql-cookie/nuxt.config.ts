@@ -7,5 +7,11 @@ export default defineNuxtConfig({
         cookiesFilter: ['token'],
       },
     },
+    codegen: {
+      schemaOverride: '../../../schema/schema.graphql',
+      watch: {
+        extra: ['./schema.graphql'],
+      },
+    },
   },
 })

@@ -105,17 +105,15 @@ export default defineNuxtPlugin((nuxt) => {
     clients[name] = client
   })
 
-  nuxt.provide('urqlClients', clients)
-  nuxt.vueApp.provide('$urqlClients', clients)
+  return {
+    provide: {
+      urqlClients: clients,
+    },
+  }
 })
 
 declare module '#app' {
   interface NuxtApp {
-    $urqlClients: {
-      [key in ClientName]: Client
-    }
-  }
-  interface Context {
     $urqlClients: {
       [key in ClientName]: Client
     }
