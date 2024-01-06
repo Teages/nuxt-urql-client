@@ -3,7 +3,14 @@ export default defineNuxtConfig({
   urqlClient: {
     clients: {
       default: {
-        url: 'https://swapi-graphql.netlify.app/.netlify/functions/index',
+        url: '/graphql',
+        credentials: 'include',
+        cookiesFilter: [],
+        fetchOptions: {
+          headers: {
+            Authorization: 'Bearer 123',
+          },
+        },
       },
     },
   },

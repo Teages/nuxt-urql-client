@@ -1,25 +1,20 @@
 <script setup lang="ts">
-const { client, gql } = useUrql()
-
 const query = gql`
-  query latestFirm {
-    allFilms (first: 1) {
-      films {
-        title
-        created
-      }
-    }
+  query test {
+    hello(name: "Teages")
+    cookie
+    authorization
   }
 `
 
-const { data } = useAsyncData(async () => {
-  const { data } = await client.query(query, {}).toPromise()
-  return data
-})
+const { data, error } = useAsyncQuery(query)
 </script>
 
 <template>
-  <div>
+  <div v-if="!error">
     {{ data }}
+  </div>
+  <div v-else>
+    {{ error }}
   </div>
 </template>

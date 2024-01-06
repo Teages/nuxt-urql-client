@@ -10,6 +10,8 @@ export function useUrql() {
   return { client, gql }
 }
 
+export { gql }
+
 export async function useQuery<Data = any, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Data, Variables>,
   variables?: Variables,

@@ -1,6 +1,6 @@
 import { cacheExchange, createClient, fetchExchange, ssrExchange } from '@urql/core'
 import type { Client, SSRData } from '@urql/core'
-import { defineNuxtPlugin, useState } from '#app'
+import { defineNuxtPlugin, useRequestHeaders, useState } from '#app'
 import type { ClientName } from '#build/urql-client/options'
 import { UrqlModuleOptions as options } from '#build/urql-client/options'
 
@@ -33,6 +33,11 @@ export default defineNuxtPlugin((nuxt) => {
       })
     }
 
+    const useBuildInFetch = clientOptions.useBuildInFetch ?? true
+    const fetchOptions = clientOptions.fetchOptions ?? {}
+    const credentials = clientOptions.credentials ?? 'omit'
+    const cookiesFilter = clientOptions.cookiesFilter ?? []
+
     const client = createClient({
       ...clientOptions,
       exchanges: [
@@ -40,13 +45,56 @@ export default defineNuxtPlugin((nuxt) => {
         ssr,
         fetchExchange,
       ],
-      // TODO: fetchOptions
-      fetch: (input, init) => $fetch.raw(
-        input.toString(),
-        {
-          ...init as any,
-          responseType: 'stream', // don't use the body
-        },
+      fetchOptions: () => {
+        let cookie = ''
+        if (!isClient()) {
+          const headers = useRequestHeaders(['cookie'])
+          headers.cookie?.split(';').forEach((cookie) => {
+            const [name, value] = cookie.split('=')
+            if (cookiesFilter?.includes(name)) {
+              cookie += `${name}=${value};`
+            }
+          })
+        }
+
+        if (fetchOptions.headers) {
+          const userHeaders = fetchOptions.headers
+          if (Array.isArray(userHeaders)) {
+            for (const [key, value] of userHeaders) {
+              if (key.toLowerCase() === 'cookie') {
+                cookie += value
+              }
+            }
+          }
+          else if (userHeaders instanceof Headers) {
+            cookie += userHeaders.get('cookie') ?? ''
+          }
+          else {
+            cookie += userHeaders.cookie ?? ''
+          }
+        }
+
+        return {
+          ...fetchOptions,
+          credentials,
+          headers: {
+            ...fetchOptions.headers,
+            cookie,
+          },
+        }
+      },
+      ...(
+        useBuildInFetch
+          ? {
+              fetch: (input, init) => $fetch.raw(
+                input.toString(),
+                {
+                  ...init as any,
+                  responseType: 'stream', // don't use the body
+                },
+              ),
+            }
+          : {}
       ),
     })
 

@@ -37,9 +37,15 @@ export default defineNuxtModule<UrqlModuleOptions>({
 
     addPlugin(resolver.resolve('./runtime/plugin'))
 
-    addImports({
-      name: 'useUrql',
+    addImports([
+      'gql',
+      'useUrql',
+      'useQuery',
+      'useMutation',
+      'useAsyncQuery',
+    ].map(name => ({
+      name,
       from: resolver.resolve('./runtime/composables/urql'),
-    })
+    })))
   },
 })
