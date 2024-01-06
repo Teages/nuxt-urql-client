@@ -29,4 +29,15 @@ builder.queryType({
   }),
 })
 
+builder.mutationType({
+  fields: t => ({
+    helloAgain: t.string({
+      args: {
+        name: t.arg.string(),
+      },
+      resolve: (_p, { name }) => `hello ${name || 'World'} from mutation`,
+    }),
+  }),
+})
+
 export const schema = builder.toSchema()
