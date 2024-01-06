@@ -1,11 +1,9 @@
 export default defineNuxtConfig({
-  modules: ['../src/module'],
+  modules: ['../../../src/module'],
   urqlClient: {
     clients: {
       default: {
         url: '/graphql',
-        credentials: 'include',
-        cookiesFilter: ['locale'],
         fetchOptions: {
           headers: {
             Authorization: 'Bearer 123',
@@ -14,5 +12,4 @@ export default defineNuxtConfig({
       },
     },
   },
-  devtools: { enabled: true },
 })

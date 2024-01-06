@@ -49,12 +49,16 @@ export default defineNuxtPlugin((nuxt) => {
         let cookie = ''
         if (!isClient()) {
           const headers = useRequestHeaders(['cookie'])
-          headers.cookie?.split(';').forEach((cookie) => {
-            const [name, value] = cookie.split('=')
-            if (cookiesFilter?.includes(name)) {
-              cookie += `${name}=${value};`
-            }
-          })
+          const cookieList: string[] = []
+          headers.cookie?.split(';')
+            .map(cookie => cookie.trim())
+            .forEach((val) => {
+              const [name, value] = val.split('=')
+              if (cookiesFilter?.includes(name)) {
+                cookieList.push(`${name}=${value}`)
+              }
+            })
+          cookie = cookieList.join('; ')
         }
 
         if (fetchOptions.headers) {
