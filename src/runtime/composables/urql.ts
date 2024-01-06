@@ -1,4 +1,4 @@
-import type { AnyVariables, CombinedError, DocumentInput, OperationContext } from '@urql/core'
+import type { AnyVariables, CombinedError, DocumentInput } from '@urql/core'
 import { gql } from '@urql/core'
 import { hash } from 'ohash'
 import { type AsyncDataOptions, useAsyncData, useNuxtApp } from '#app'
@@ -15,10 +15,9 @@ export { gql }
 export async function useQuery<Data = any, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Data, Variables>,
   variables?: Variables,
-  context?: Partial<OperationContext>,
 ) {
   const { client } = useUrql()
-  const ans = await client.query(document, variables, context).toPromise()
+  const ans = await client.query(document, variables).toPromise()
   if (ans.error) {
     throw createUrqlError(ans.error)
   }
@@ -29,10 +28,9 @@ export async function useQuery<Data = any, Variables extends AnyVariables = AnyV
 export async function useMutation<Data = any, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Data, Variables>,
   variables?: Variables,
-  context?: Partial<OperationContext>,
 ) {
   const { client } = useUrql()
-  const ans = await client.mutation(document, variables, context).toPromise()
+  const ans = await client.mutation(document, variables).toPromise()
   if (ans.error) {
     throw createUrqlError(ans.error)
   }
@@ -43,11 +41,10 @@ export async function useMutation<Data = any, Variables extends AnyVariables = A
 export function useAsyncQuery<Data = any, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Data, Variables>,
   variables?: Variables,
-  context?: Partial<OperationContext>,
   options?: AsyncDataOptions<Data | undefined>,
 ) {
   const key = hash({ document, variables })
-  return useAsyncData(key, () => useQuery(document, variables, context), options)
+  return useAsyncData(key, () => useQuery(document, variables), options)
 }
 
 // TODO: waiting nitro support websocket
@@ -55,7 +52,6 @@ export function useAsyncQuery<Data = any, Variables extends AnyVariables = AnyVa
   export async function useSubscription<Data = any, Variables extends AnyVariables = AnyVariables>(
     query: MaybeRef<DocumentInput<Data, Variables>>,
     variables: MaybeRef<Variables>,
-    context?: MaybeRef<Partial<OperationContext>>,
   ) {
     const { client } = useUrql()
 
@@ -63,13 +59,12 @@ export function useAsyncQuery<Data = any, Variables extends AnyVariables = AnyVa
     let sub: Subscription | null = null
     let error: CombinedError | undefined
 
-    // update when query/variables/context changes
-    watch([query, variables, context], async () => {
+    // update when query/variables changes
+    watch([query, variables], async () => {
       const _query = unref(query)
       const _variables = unref(variables)
-      const _context = unref(context)
 
-      const req = client.subscription(_query, _variables, _context)
+      const req = client.subscription(_query, _variables)
       sub = req.subscribe((newResult) => {
         result.value = newResult
       })
