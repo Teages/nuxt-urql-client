@@ -1,4 +1,4 @@
-import { addImports, addPlugin, addTemplate, addTypeTemplate, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addImports, addPlugin, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import type { UrqlModuleOptions } from './options'
 
 export default defineNuxtModule<UrqlModuleOptions>({
@@ -10,6 +10,11 @@ export default defineNuxtModule<UrqlModuleOptions>({
     clients: {},
   },
   setup(options, _nuxt) {
+    const logger = useLogger('urql-client')
+    if (Object.keys(options.clients).length === 0) {
+      logger.warn('No client is configured.')
+    }
+
     const resolver = createResolver(import.meta.url)
 
     // export options and its type to runtime plugin

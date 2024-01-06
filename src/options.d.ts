@@ -6,7 +6,10 @@ import type { ClientOptions as _ClientOptions } from '@urql/core'
 export interface UrqlModuleOptions {
   clients: {
     default?: UrqlClientOptions
+    // TODO: support multiple clients
+    /*
     [key: string]: UrqlClientOptions
+    */
   }
 }
 

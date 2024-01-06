@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { client, gql } = useUrql('default')
+const { client, gql } = useUrql()
 
 const query = gql`
   query latestFirm {
