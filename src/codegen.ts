@@ -1,19 +1,17 @@
 import { readFile } from 'node:fs/promises'
-import type { Nuxt } from '@nuxt/schema'
-import type { Types as CodegenType } from '@graphql-codegen/plugin-helpers'
-import { hash } from 'ohash'
 
+import type { Nuxt } from '@nuxt/schema'
+import { createResolver, useLogger } from '@nuxt/kit'
+
+import { hash } from 'ohash'
 import { defu } from 'defu'
 import { glob } from 'glob'
 import { normalize } from 'pathe'
 
 import { generate } from '@graphql-codegen/cli'
 
-import { addTemplate, createResolver, updateTemplates, useLogger } from '@nuxt/kit'
 import type { UrqlModuleOptions } from './options'
 import { addTsTemplate } from './utils/typescript'
-
-interface File { filename: string, content: string }
 
 export async function setupCodegen(
   options: UrqlModuleOptions,
@@ -21,6 +19,7 @@ export async function setupCodegen(
 ) {
   if (
     options.codegen === false
+    || Object.keys(options.clients).length === 0
   ) {
     // skip codegen
     addTsTemplate({
@@ -35,6 +34,7 @@ export async function setupCodegen(
       useTypeImports: true,
     },
     watch: {},
+    path: 'gql',
   }
   const config = defu(options.codegen, defaultConfig)
 
@@ -42,6 +42,9 @@ export async function setupCodegen(
   const logger = useLogger('urql-client:codegen')
   const resolver = createResolver(nuxt.options.rootDir)
   const { resolve } = resolver
+
+  // prepare path
+  const generatePath = resolve(config.path)
 
   // prepare schema
   const schema = config.schemaOverride || [
@@ -72,7 +75,7 @@ export async function setupCodegen(
     const start = Date.now()
 
     try {
-      const res = await generate({
+      await generate({
         schema: schemaFiles,
         documents: [
           ...documents,
@@ -80,53 +83,32 @@ export async function setupCodegen(
         ],
         ignoreNoDocuments: true,
         generates: {
-          'urql-client/gql/': {
+          [`${generatePath}/`]: {
             preset: 'client',
             presetConfig: config.presetConfig,
             config: config.config,
           },
         },
         silent: true,
-      }, false) as CodegenType.FileOutput[]
+      }, true)
 
       logger.success(`GraphQL codegen done in ${Date.now() - start}ms`)
-      return res
+      return true
     }
     catch (e) {
       logger.warn(`GraphQL codegen failed after ${Date.now() - start}ms`)
       logger.warn(e)
-      return null
+      return false
     }
   }
-
-  const templateFiles = new Map<string, string>()
-  const updateCodegen = (files: File[]) => files.forEach(({ filename, content }) => {
-    const alreadyExists = templateFiles.has(filename)
-    const needUpdate = !alreadyExists || templateFiles.get(filename) !== content
-    templateFiles.set(filename, content)
-
-    if (alreadyExists) {
-      if (needUpdate) {
-        updateTemplates({
-          filter: template => template.filename === filename,
-        })
-      }
-    }
-    else {
-      // add template
-      addTemplate({
-        filename,
-        getContents: () => templateFiles.get(filename) ?? '',
-        write: true,
-      })
-    }
-  })
 
   logger.start('Generating GraphQL code')
-  const res = await generateCode()
-  if (res) {
-    updateCodegen(res)
-  }
+  await generateCode()
+  addTsTemplate({
+    filename: 'urql-client/gql/index.ts',
+    content: `export { graphql } from '${generatePath}'`,
+    write: true,
+  })
 
   if (config.watch) {
     const extra = (config.watch.extra ?? [])
@@ -160,10 +142,7 @@ export async function setupCodegen(
 
         logger.start(`GraphQL codegen: ${path}`)
         lock = fileHash
-        const res = await generateCode()
-        if (res) {
-          updateCodegen(res)
-        }
+        await generateCode()
         lock = undefined
       }
     })

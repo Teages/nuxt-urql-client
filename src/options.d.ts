@@ -18,6 +18,12 @@ export interface UrqlModuleOptions {
    */
   codegen?: false | {
     /**
+     * @description The output path of generated code.
+     * @default 'gql'
+     */
+    path: string
+
+    /**
      * @description Override config of client preset.
      *
      * See https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#config-api

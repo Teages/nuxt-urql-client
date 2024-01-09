@@ -32,6 +32,7 @@ export function addTsTemplate(
   file: {
     filename: string
     content: string
+    write?: boolean
   },
 ) {
   const res = compileTs([file], {
@@ -44,8 +45,9 @@ export function addTsTemplate(
     throw new Error('Failed to compile typescript')
   }
   addTemplate({
-    filename: jsFile.filename,
+    filename: jsFile.filename.replace(/\.js$/, '.mjs'),
     getContents: () => jsFile.content,
+    write: file.write,
   })
   addTypeTemplate({
     filename: dtsFile.filename,

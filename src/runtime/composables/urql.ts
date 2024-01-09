@@ -46,7 +46,7 @@ export function useAsyncQuery<Data = any, Variables extends AnyVariables = AnyVa
   return useAsyncData(key, () => useQuery(document, variables), options)
 }
 
-// TODO: waiting nitro support websocket
+// TODO: need test
 /*
   export async function useSubscription<Data = any, Variables extends AnyVariables = AnyVariables>(
     query: MaybeRef<DocumentInput<Data, Variables>>,
