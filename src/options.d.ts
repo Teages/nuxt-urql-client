@@ -21,7 +21,7 @@ export interface UrqlModuleOptions {
      * @description The output path of generated code.
      * @default 'gql'
      */
-    path: string
+    path?: string
 
     /**
      * @description Override config of client preset.
