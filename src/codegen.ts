@@ -44,7 +44,7 @@ export async function setupCodegen(
   const { resolve } = resolver
 
   // prepare path
-  const generatePath = resolve(config.path)
+  const generatePath = resolve(config.path ?? 'gql')
 
   // prepare schema
   const schema = config.schemaOverride || [

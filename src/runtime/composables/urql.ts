@@ -1,6 +1,7 @@
 import type { AnyVariables, CombinedError, DocumentInput } from '@urql/core'
 import { hash } from 'ohash'
-import { type AsyncDataOptions, useAsyncData, useNuxtApp } from '#app'
+import type { KeysOf, PickFrom } from 'nuxt/dist/app/composables/asyncData'
+import { type AsyncData, type AsyncDataOptions, useAsyncData, useNuxtApp } from '#app'
 
 export { graphql as gql } from '#build/urql-client/gql'
 
@@ -14,7 +15,7 @@ export function useUrql() {
 export async function useQuery<Data = any, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Data, Variables>,
   variables?: Variables,
-) {
+): Promise<Data | undefined> {
   const { client } = useUrql()
   const ans = await client.query(document, variables).toPromise()
   if (ans.error) {
@@ -27,7 +28,7 @@ export async function useQuery<Data = any, Variables extends AnyVariables = AnyV
 export async function useMutation<Data = any, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Data, Variables>,
   variables?: Variables,
-) {
+): Promise<Data | undefined> {
   const { client } = useUrql()
   const ans = await client.mutation(document, variables).toPromise()
   if (ans.error) {
@@ -37,13 +38,59 @@ export async function useMutation<Data = any, Variables extends AnyVariables = A
   return ans.data
 }
 
-export function useAsyncQuery<Data = any, Variables extends AnyVariables = AnyVariables>(
+export function useAsyncQuery<
+  Data = any,
+  Variables extends AnyVariables = AnyVariables,
+  DataT = Data | undefined,
+  PickKeys extends KeysOf<DataT> = KeysOf<DataT>,
+  DefaultT = null,
+>(
   document: DocumentInput<Data, Variables>,
   variables?: Variables,
-  options?: AsyncDataOptions<Data | undefined>,
-) {
+  options?: AsyncDataOptions<Data | undefined, DataT, PickKeys, DefaultT>
+): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null>
+export function useAsyncQuery<
+  Data = any,
+  Variables extends AnyVariables = AnyVariables,
+  DataT = Data | undefined,
+  PickKeys extends KeysOf<DataT> = KeysOf<DataT>,
+  DefaultT = DataT,
+>(
+  document: DocumentInput<Data, Variables>,
+  variables?: Variables,
+  options?: AsyncDataOptions<Data | undefined, DataT, PickKeys, DefaultT>,
+): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null> {
   const key = hash({ document, variables })
   return useAsyncData(key, () => useQuery(document, variables), options)
+}
+
+export function useLazyAsyncQuery<
+  ResT = any,
+  Variables extends AnyVariables = AnyVariables,
+  DataT = ResT | undefined,
+  PickKeys extends KeysOf<DataT> = KeysOf<DataT>,
+  DefaultT = null,
+>(
+  document: DocumentInput<ResT, Variables>,
+  variables?: Variables,
+  options?: AsyncDataOptions<ResT | undefined, DataT, PickKeys, DefaultT>
+): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null>
+export function useLazyAsyncQuery<
+  ResT = any,
+  Variables extends AnyVariables = AnyVariables,
+  DataT = ResT | undefined,
+  PickKeys extends KeysOf<DataT> = KeysOf<DataT>,
+  DefaultT = DataT,
+>(
+  document: DocumentInput<ResT, Variables>,
+  variables?: Variables,
+  options?: AsyncDataOptions<ResT | undefined, DataT, PickKeys, DefaultT>,
+): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null> {
+  const key = hash({ document, variables })
+  return useAsyncData(key, () => useQuery(document, variables), {
+    lazy: true,
+    ...options,
+  })
 }
 
 // TODO: need test
