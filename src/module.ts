@@ -4,7 +4,7 @@ import { setupCodegen } from './codegen'
 
 export default defineNuxtModule<UrqlModuleOptions>({
   meta: {
-    name: 'my-module',
+    name: '@teages/nuxt-urql-client',
     configKey: 'urqlClient',
   },
   defaults: {

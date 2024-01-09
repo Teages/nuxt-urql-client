@@ -1,10 +1,14 @@
 {
-  "name": "my-module",
+  "name": "@teages/nuxt-urql-client",
   "type": "module",
   "version": "1.0.0",
-  "description": "My new Nuxt module",
+  "description": "A simple graphql (urql) client for Nuxt with codegen.",
   "license": "MIT",
-  "repository": "your-org/my-module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Teages/nuxt-urql-client.git"
+  },
+
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",
@@ -56,5 +60,8 @@
     "nuxt": "^3.9.0",
     "typescript": "^5.3.3",
     "vitest": "^1.1.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
