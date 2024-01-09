@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v1.1.1
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v1.1.0...v1.1.1)
+
+### 🩹 Fixes
+
+- **options:** Codegen.path should be optional ([7250ede](https://github.com/Teages/nuxt-urql-client/commit/7250ede))
+
+### 🏡 Chore
+
+- **git:** Add gql to .gitignore ([ba5e118](https://github.com/Teages/nuxt-urql-client/commit/ba5e118))
+
+### ❤️ Contributors
+
+- Teages <Teages@teages.xyz>
+
 ## v1.1.0
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v1.0.1...v1.1.0)
