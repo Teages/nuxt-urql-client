@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.3.0
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v1.2.0...v1.3.0)
+
+### 🚀 Enhancements
+
+- Allow rewrite context on composable api ([f75d21b](https://github.com/Teages/nuxt-urql-client/commit/f75d21b))
+- Client side endpoint config ([fac1a0d](https://github.com/Teages/nuxt-urql-client/commit/fac1a0d))
+
+### ❤️ Contributors
+
+- Teages <Teages@teages.xyz>
+
 ## v1.2.0
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v1.1.1...v1.2.0)
