@@ -63,6 +63,11 @@ export interface UrqlModuleOptions {
 
 export type UrqlClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges'> & {
   /**
+   * @description Rewrite the url in client side.
+   */
+  urlClient?: string
+
+  /**
    * @description Replace fetch with nuxt built-in ofetch. Could provide better performance for full stack api.
    *
    * See https://nuxt.com/docs/api/utils/dollarfetch

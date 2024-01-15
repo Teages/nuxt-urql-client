@@ -38,8 +38,13 @@ export default defineNuxtPlugin((nuxt) => {
     const credentials = clientOptions.credentials ?? 'omit'
     const cookiesFilter = clientOptions.cookiesFilter ?? []
 
+    const url = import.meta.client && clientOptions.urlClient
+      ? clientOptions.urlClient
+      : clientOptions.url
+
     const client = createClient({
       ...clientOptions,
+      url,
       exchanges: [
         cacheExchange,
         ssr,
