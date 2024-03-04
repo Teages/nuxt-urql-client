@@ -2,11 +2,19 @@ import antfu from '@antfu/eslint-config'
 
 export default antfu({
   ignores: [
-    'playground/gql',
+    'dist',
+    'node_modules',
   ],
 }, {
   rules: {
     'node/prefer-global/process': ['error', 'always'],
     'curly': ['error', 'all'],
+  },
+}, {
+  // conflict with changelogen: remove after https://github.com/unjs/changelogen/issues/170
+  files: ['package.json'],
+  name: 'teages:changelogen-package-json',
+  rules: {
+    'style/eol-last': ['error', 'never'],
   },
 })
