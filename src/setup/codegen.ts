@@ -120,10 +120,6 @@ export async function setupCodegen(
           gqlTagName,
         },
         pluckConfig: {
-          // modules: [{
-          //   name: 'nuxt-urql-client',
-          //   identifier: gqlTagName,
-          // }],
           gqlMagicComment: '__GraphQL_Disabled__',
           globalGqlIdentifierName,
           globalIdentifier: gqlTagName,
@@ -147,7 +143,6 @@ export async function setupCodegen(
           },
           pluckConfig: client.pluckConfig,
           silent: true,
-          debug: true,
         }, false) as Array<{ filename: string, content: string }>
       }),
     )).flat()
@@ -171,17 +166,20 @@ export async function setupCodegen(
   // add auto import
   const autoImportList: Import[] = [{
     from: '@graphql-typed-document-node/core',
-    name: 'ResultOf',
+    name: 'type ResultOf',
+    type: true,
   }, {
     from: '@graphql-typed-document-node/core',
-    name: 'VariablesOf',
+    name: 'type VariablesOf',
+    type: true,
   }]
-  const pushAutoImport = (names: string[], from: string, as?: string) => {
+  const pushAutoImport = (names: string[], from: string, as?: string, type?: boolean) => {
     names.forEach((name) => {
       autoImportList.push({
         from: `#build/urql-client/codegen/${from}`,
         name,
         as,
+        type,
       })
     })
   }
@@ -204,8 +202,10 @@ export async function setupCodegen(
     if (id === 'default') {
       pushAutoImport([gqlTagName], `${id}/gql-client`)
       pushAutoImport([
-        'DocumentType',
-        'FragmentType',
+        'type DocumentType',
+        'type FragmentType',
+      ], id, undefined, true)
+      pushAutoImport([
         'getFragmentData',
         'makeFragmentData',
         'isFragmentReady',

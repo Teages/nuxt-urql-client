@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const query = gql`
+const query = gqlauth(/* GraphQL */`
   query testHeader {
     authorization
   }
-`
+`)
 
-const { data, error } = useAsyncQuery(query)
+const { data, error } = await useAsyncQuery(query)
 </script>
 
 <template>

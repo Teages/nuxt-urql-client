@@ -2,14 +2,15 @@ export default defineNuxtConfig({
   modules: ['../../../src/module'],
   urqlClient: {
     clients: {
-      default: {
-        url: '/graphql',
-      },
-    },
-    codegen: {
-      schemaOverride: '../../../schema/schema.graphql',
-      watch: {
-        extra: ['./schema.graphql'],
+      hello: {
+        url: 'https://graphql-test.teages.xyz/graphql-hello',
+        credentials: 'include',
+        cookiesFilter: ['locale'],
+        fetchOptions: {
+          headers: {
+            Authorization: 'Bearer 123',
+          },
+        },
       },
     },
   },

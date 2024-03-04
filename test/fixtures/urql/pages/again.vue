@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const mutation = gql`
+const mutation = gqlhello(/* GraphQL */`
   mutation testMutation($name: String!) {
     helloAgain(name: $name)
   }
-`
+`)
 
 const { data } = useAsyncData(() => useMutation(mutation, { name: 'two' }))
 </script>

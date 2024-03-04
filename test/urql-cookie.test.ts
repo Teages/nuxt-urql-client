@@ -7,12 +7,12 @@ describe('urql-cookie', async () => {
     rootDir: fileURLToPath(new URL('./fixtures/urql-cookie', import.meta.url)),
   })
 
-  it('header Authorization', async () => {
+  it('cookies', async () => {
     const html = await $fetch('/', {
       headers: {
-        cookie: 'token=123',
+        cookie: 'test_only=123',
       },
     })
-    expect(html).toContain('Cookies: token=123')
+    expect(html).toContain('Cookies: 123')
   })
 })

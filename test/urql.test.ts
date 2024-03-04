@@ -9,8 +9,8 @@ describe('urql', async () => {
 
   it('useQuery and useAsyncQuery', async () => {
     const html = await $fetch('/hello')
-    expect(html).toContain('AsyncQuery: hello one')
-    expect(html).toContain('Query: hello two')
+    expect(html).toContain('AsyncQuery: hello, one')
+    expect(html).toContain('Query: hello, two')
   })
 
   it('useMutation', async () => {
