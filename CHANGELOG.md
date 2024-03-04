@@ -1,6 +1,29 @@
 # Changelog
 
 
+## v2.0.0
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v1.3.0...v2.0.0)
+
+### 🚀 Enhancements
+
+- Add multiple clients support ([810999b](https://github.com/Teages/nuxt-urql-client/commit/810999b))
+
+### 🩹 Fixes
+
+- **build:** Add inlined implicit external ([2b4adec](https://github.com/Teages/nuxt-urql-client/commit/2b4adec))
+
+### 🏡 Chore
+
+- Move test case and clean up ([4ace86b](https://github.com/Teages/nuxt-urql-client/commit/4ace86b))
+- Disable insert_final_newline for package.json ([320de2b](https://github.com/Teages/nuxt-urql-client/commit/320de2b))
+- Update dependencies ([d3c7f8e](https://github.com/Teages/nuxt-urql-client/commit/d3c7f8e))
+- Apply lint ([5d0aebc](https://github.com/Teages/nuxt-urql-client/commit/5d0aebc))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v1.3.0
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v1.2.0...v1.3.0)
