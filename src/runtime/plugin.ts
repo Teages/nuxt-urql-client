@@ -2,20 +2,20 @@ import { cacheExchange, createClient, fetchExchange, ssrExchange } from '@urql/c
 import type { Client, SSRData } from '@urql/core'
 import { defineNuxtPlugin, useRequestHeaders, useState } from '#app'
 import type { ClientName } from '#build/urql-client/options'
-import { UrqlModuleOptions as options } from '#build/urql-client/options'
+import { urqlModuleOptions as options } from '#build/urql-client/options'
 
 export default defineNuxtPlugin((nuxt) => {
   const isClient = () => import.meta.client
 
-  const getSsrKey = (name: string) => `__URQL_SSR_DATA__${name}__`
+  const getSsrKey = (id: string) => `__URQL_SSR_DATA__${id}__`
 
   const clients: Record<string, Client> = {}
   // for each client, create a urql client
-  Object.entries(options.clients).forEach(([name, clientOptions]) => {
+  Object.entries(options.clients).forEach(([id, clientOptions]) => {
     /**
      * SSR Exchange
      */
-    const ssrKey = getSsrKey(name)
+    const ssrKey = getSsrKey(id)
     const ssrStorage = useState<SSRData>(ssrKey)
     const ssr = ssrExchange({
       isClient: isClient(),
@@ -107,7 +107,7 @@ export default defineNuxtPlugin((nuxt) => {
       ),
     })
 
-    clients[name] = client
+    clients[id] = client
   })
 
   return {

@@ -1,20 +1,30 @@
 <script setup lang="ts">
-const query = gql(`
-  query test {
-    hello(name: "Teages")
-    cookie
-    authorization
+const queryUser = gqluser(/* GraphQL */`
+  query QueryUser {
+    user(id: "1") {
+      name
+      id
+    }
   }
 `)
 
-const { data, error } = useAsyncQuery(query)
+const query = gqlhello(/* GraphQL */`
+  query QueryHello {
+    hello(name: "Teages")
+  }
+`)
+
+const { data: helloData } = await useAsyncQuery(query)
+const { data: userData } = await useAsyncQuery(queryUser)
 </script>
 
 <template>
-  <div v-if="!error">
-    {{ data }}
-  </div>
-  <div v-else>
-    {{ error }}
+  <div>
+    <p>
+      helloData: {{ helloData }}
+    </p>
+    <p>
+      userData: {{ userData }}
+    </p>
   </div>
 </template>
