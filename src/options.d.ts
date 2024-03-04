@@ -2,7 +2,6 @@ import type { ClientPresetConfig } from '@graphql-codegen/client-preset'
 import type { CodegenConfig } from '@graphql-codegen/cli'
 
 import type { ClientOptions as _ClientOptions } from '@urql/core'
-import type { ParsedScalarsMap } from '@graphql-codegen/visitor-plugin-common'
 
 export interface UrqlModuleOptions {
   clients: {
@@ -65,8 +64,15 @@ export interface CodegenOptions {
      * @description Extends or overrides the built-in scalars and custom GraphQL scalars to a custom type.
      *
      * @see https://the-guild.dev/graphql/codegen/plugins/typescript/typescript#scalars
+     *
+     * @example
+     * import { DateTimeResolver } from 'graphql-scalars'
+     *
+     * scalars: {
+     *   Date: DateTimeResolver.extensions.codegenScalarType
+     * }
      */
-    scalars?: ParsedScalarsMap
+    scalars?: any
 
     /**
      * @description Allows you to override the type that unknown scalars will have. Defaults to `any`.
