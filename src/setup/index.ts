@@ -1,4 +1,4 @@
-import { type Resolver, addImports, addPlugin, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
+import { type Resolver, addTemplate, addTypeTemplate, useLogger } from '@nuxt/kit'
 import type { Nuxt } from '@nuxt/schema'
 import type { UrqlModuleOptions } from '../options'
 import { setupCodegen } from './codegen'
