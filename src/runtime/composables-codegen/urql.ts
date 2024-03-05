@@ -1,6 +1,6 @@
 import type { AnyVariables, Client, CombinedError, DocumentInput, OperationContext } from '@urql/core'
 import { hash } from 'ohash'
-import type { KeysOf, PickFrom } from 'nuxt/dist/app/composables/asyncData'
+import type { KeysOf, PickFrom } from '#app/composables/asyncData'
 import { type AsyncData, type AsyncDataOptions, useAsyncData, useNuxtApp } from '#app'
 import type { ClientName } from '#build/urql-client/options'
 
