@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.0.3
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.2...v2.0.3)
+
+### 🩹 Fixes
+
+- **codegen:** Remove debug output ([59d8452](https://github.com/Teages/nuxt-urql-client/commit/59d8452))
+- UseAsyncQuery returns any ([5cf7b2b](https://github.com/Teages/nuxt-urql-client/commit/5cf7b2b))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.2
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.1...v2.0.2)
