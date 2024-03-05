@@ -34,6 +34,7 @@ export async function setupCodegen(
     }]
   }
   const logger = useLogger('gql-codegen')
+  const cwd = rootResolver.resolve('.')
 
   const codegenCache = new Map<string, string>()
   const schemaCache = new Map<string, string>()
@@ -77,40 +78,14 @@ export async function setupCodegen(
           return schemaCache.get(url) as string
         }
 
-      const getDocuments = config.documentsOverride
-        ? () => config.documentsOverride
-        : async () => {
-          const skip = [
-            ...nuxt.options.modulesDir,
-            nuxt.options.buildDir,
-            nuxt.options.serverDir,
-            nuxt.options.nitro.output?.dir ?? '.output',
-          ].map(dir => normalize(rootResolver.resolve(dir)))
-          const dirs = (await fs.readdir(
-            rootResolver.resolve('./'),
-            { withFileTypes: true },
-          ))
-            .filter(dir => dir.isDirectory())
-            .filter(({ name }) => {
-              const path = normalize(rootResolver.resolve(name))
-              return !skip.includes(path)
-            })
-
-          const documents = dirs.map((dir) => {
-            const path = normalize(rootResolver.resolve(dir.name))
-            return glob.sync(`${path}/**/*`)
-          }).flat()
-
-          return [
-            ...documents,
-            ...glob.sync(rootResolver.resolve('./*'), { nodir: true }),
-          ].map(p => normalize(p))
-        }
+      const documents = config.documentsOverride
+        ? config.documentsOverride
+        : getDefaultDocuments()
 
       return async () => ({
         id,
         schema: await getSchema(),
-        documents: await getDocuments(),
+        documents,
         preset: 'client' as const,
         presetConfig: {
           fragmentMasking: {
@@ -143,6 +118,8 @@ export async function setupCodegen(
           },
           pluckConfig: client.pluckConfig,
           silent: true,
+          debug: true,
+          cwd,
         }, false) as Array<{ filename: string, content: string }>
       }),
     )).flat()
@@ -282,4 +259,32 @@ export async function setupCodegen(
   }
 
   return autoImportList
+}
+
+function getDefaultDocuments() {
+  const exts = [
+  // js / ts files
+    ['js', 'ts', 'jsx', 'tsx', 'mjs', 'cjs', 'mts', 'cts'],
+
+    // vue files
+    ['vue'],
+  ].flat()
+
+  // Nuxt3 dirs
+  const dirs = [
+    'components',
+    'composables',
+    'content',
+    'layouts',
+    'middleware',
+    'modules',
+    'pages',
+    'plugins',
+    'utils',
+  ]
+
+  return [
+  `{${dirs.join(',')}}/**/*.{${exts.join(',')}}`,
+  `*.{${exts.join(',')}}`,
+  ]
 }
