@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v2.0.1
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.0...v2.0.1)
+
+### 🩹 Fixes
+
+- Plugin is not resolved ([c158905](https://github.com/Teages/nuxt-urql-client/commit/c158905))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.0
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v1.3.0...v2.0.0)
