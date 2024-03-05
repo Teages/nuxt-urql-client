@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v2.0.2
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.1...v2.0.2)
+
+### 🩹 Fixes
+
+- **codegen:** Better default documents ([d8b2a11](https://github.com/Teages/nuxt-urql-client/commit/d8b2a11))
+
+### 🏡 Chore
+
+- **release:** V2.0.1 ([279b5c7](https://github.com/Teages/nuxt-urql-client/commit/279b5c7))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.1
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.0...v2.0.1)
