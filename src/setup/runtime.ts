@@ -5,7 +5,7 @@ export function setupRuntime(
   codegen: boolean,
 ) {
   // plugin
-  addPlugin(resolver.resolve('./runtime/plugin.ts'))
+  addPlugin(resolver.resolve('./runtime/plugin'))
 
   // composables
   addImportsDir(resolver.resolve(
