@@ -16,7 +16,6 @@ export interface UrqlModuleOptions {
    * @description Setup the codegen of GraphQL operations for all clients.
    */
   codegen?: false | (CodegenOptions & {
-
     /**
      * @description Rerun code generation when the app HMR.
      *

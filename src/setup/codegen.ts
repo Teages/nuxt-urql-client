@@ -211,49 +211,44 @@ export async function setupCodegen(
       const isServer = resolvedPath.startsWith(normalize(rootResolver.resolve(nuxt.options.serverDir)))
 
       const clients = await Promise.all(getClients.map(getClient => getClient()))
-
       const graphqlTags = clients.map(client => client.pluckConfig.globalGqlIdentifierName).flat()
 
-      const files = clients.map(client => client.documents).flat()
       const extraFiles = extra
         .flatMap(doc => glob.sync(doc, { absolute: true }))
         .map(file => normalize(file))
-      files.push(...extraFiles)
 
-      if (files.includes(resolvedPath) || (isServer && nitroWatch)) {
-        const changedFile = await fs.readFile(resolvedPath, 'utf-8')
-        if (
-          !(extraFiles.includes(resolvedPath) || graphqlTags.some(tag => changedFile.includes(tag)))
-          && !(isServer && nitroWatch)
-        ) {
-          logger.info('GraphQL codegen skipped')
-          return
-        }
-
-        const fileHash = hash(changedFile)
-        if (lock === fileHash) {
-          return
-        }
-
-        if (isServer && nitroWatch) {
-          reloadSchema.forEach(async (clientId) => {
-            const client = options.clients[clientId]
-            if (!client) {
-              return
-            }
-            const url = client.url
-            schemaCache.delete(url)
-          })
-        }
-
-        logger.start(`GraphQL codegen: ${path}`)
-        lock = fileHash
-        await codegen()
-        await updateTemplates({
-          filter: ({ filename }) => filename.startsWith('urql-client/codegen/'),
-        })
-        lock = undefined
+      const changedFile = await fs.readFile(resolvedPath, 'utf-8')
+      if (
+        !(extraFiles.includes(resolvedPath) || graphqlTags.some(tag => changedFile.includes(tag)))
+        && !(isServer && nitroWatch)
+      ) {
+        logger.info('GraphQL codegen skipped')
+        return
       }
+
+      const fileHash = hash(changedFile)
+      if (lock === fileHash) {
+        return
+      }
+
+      if (isServer && nitroWatch) {
+        reloadSchema.forEach(async (clientId) => {
+          const client = options.clients[clientId]
+          if (!client) {
+            return
+          }
+          const url = client.url
+          schemaCache.delete(url)
+        })
+      }
+
+      logger.start(`GraphQL codegen: ${path}`)
+      lock = fileHash
+      await codegen()
+      await updateTemplates({
+        filter: ({ filename }) => filename.startsWith('urql-client/codegen/'),
+      })
+      lock = undefined
     })
   }
 
