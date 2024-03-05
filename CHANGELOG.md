@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v2.0.4
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.3...v2.0.4)
+
+### 🩹 Fixes
+
+- **codegen:** Watch not work ([b679212](https://github.com/Teages/nuxt-urql-client/commit/b679212))
+
+### 🏡 Chore
+
+- **release:** V2.0.3 ([5dc887c](https://github.com/Teages/nuxt-urql-client/commit/5dc887c))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.3
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.2...v2.0.3)
