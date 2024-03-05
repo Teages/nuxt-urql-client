@@ -118,7 +118,6 @@ export async function setupCodegen(
           },
           pluckConfig: client.pluckConfig,
           silent: true,
-          debug: true,
           cwd,
         }, false) as Array<{ filename: string, content: string }>
       }),
