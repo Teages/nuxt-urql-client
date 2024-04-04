@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v2.0.5
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.4...v2.0.5)
+
+### 🩹 Fixes
+
+- **codegen:** Will not try to read removed file ([bb2a478](https://github.com/Teages/nuxt-urql-client/commit/bb2a478))
+
+### 🏡 Chore
+
+- **release:** V2.0.4 ([37f66bc](https://github.com/Teages/nuxt-urql-client/commit/37f66bc))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.4
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.3...v2.0.4)
