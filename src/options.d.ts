@@ -28,23 +28,15 @@ export interface UrqlModuleOptions {
      */
     watch?: false | {
       /**
-       * @description Regenerate code when the file changed.
-       * @experimental need more test
+       * @description Regenerate when the file changed. (The file must be watched by Nuxt)
        */
       extra?: string[]
 
       /**
-       * @description Regenerate code when Nitro server HMR.
+       * @description Regenerate when Nitro server HMR.
        * @default false
-       * @experimental need more test
        */
-      nitro?: boolean | {
-        /**
-         * @description Reload schema when the Nitro server HMR.
-         * @experimental need more test
-         */
-        reloadSchema?: string[]
-      }
+      nitro?: boolean
     }
   })
 }

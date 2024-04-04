@@ -200,15 +200,11 @@ export async function setupCodegen(
 
     const extra = (watchConfig.extra ?? [])
       .map(doc => rootResolver.resolve(doc))
-    const nitroWatch = !!watchConfig.nitro
-    const reloadSchema = typeof watchConfig.nitro === 'object'
-      ? watchConfig.nitro.reloadSchema ?? []
-      : []
+    const nitroWatch = watchConfig.nitro ?? false
 
     let lock: string | undefined
-    nuxt.hook('builder:watch', async (_event, path) => {
+    nuxt.hook('builder:watch', async (event, path) => {
       const resolvedPath = normalize(rootResolver.resolve(path))
-      const isServer = resolvedPath.startsWith(normalize(rootResolver.resolve(nuxt.options.serverDir)))
 
       const clients = await Promise.all(getClients.map(getClient => getClient()))
       const graphqlTags = clients.map(client => client.pluckConfig.globalGqlIdentifierName).flat()
@@ -217,29 +213,21 @@ export async function setupCodegen(
         .flatMap(doc => glob.sync(doc, { absolute: true }))
         .map(file => normalize(file))
 
-      const changedFile = await fs.readFile(resolvedPath, 'utf-8')
-      if (
-        !(extraFiles.includes(resolvedPath) || graphqlTags.some(tag => changedFile.includes(tag)))
-        && !(isServer && nitroWatch)
-      ) {
-        logger.info('GraphQL codegen skipped')
+      const changedFile = ['add', 'change'].includes(event)
+        ? await fs.readFile(resolvedPath, 'utf-8')
+        : ''
+
+      if (!(
+        // the file is in the extra list
+        extraFiles.includes(resolvedPath)
+        || graphqlTags.some(tag => changedFile.includes(tag))
+      )) {
         return
       }
 
       const fileHash = hash(changedFile)
       if (lock === fileHash) {
         return
-      }
-
-      if (isServer && nitroWatch) {
-        reloadSchema.forEach(async (clientId) => {
-          const client = options.clients[clientId]
-          if (!client) {
-            return
-          }
-          const url = client.url
-          schemaCache.delete(url)
-        })
       }
 
       logger.start(`GraphQL codegen: ${path}`)
@@ -250,6 +238,26 @@ export async function setupCodegen(
       })
       lock = undefined
     })
+
+    if (nitroWatch) {
+      const nitroLock = 'Nitro HMR'
+      nuxt.hook('nitro:build:before', (nitro) => {
+        nitro.hooks.hook('dev:reload', async () => {
+          if (lock === nitroLock) {
+            return
+          }
+          logger.start(`GraphQL codegen: Nitro HMR`)
+          lock = nitroLock
+
+          await codegen()
+          await updateTemplates({
+            filter: ({ filename }) => filename.startsWith('urql-client/codegen/'),
+          })
+
+          lock = undefined
+        })
+      })
+    }
   }
 
   return autoImportList
@@ -257,7 +265,7 @@ export async function setupCodegen(
 
 function getDefaultDocuments() {
   const exts = [
-  // js / ts files
+    // js / ts files
     ['js', 'ts', 'jsx', 'tsx', 'mjs', 'cjs', 'mts', 'cts'],
 
     // vue files
@@ -278,7 +286,7 @@ function getDefaultDocuments() {
   ]
 
   return [
-  `{${dirs.join(',')}}/**/*.{${exts.join(',')}}`,
-  `*.{${exts.join(',')}}`,
+    `{${dirs.join(',')}}/**/*.{${exts.join(',')}}`,
+    `*.{${exts.join(',')}}`,
   ]
 }
