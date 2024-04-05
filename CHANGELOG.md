@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v2.0.6
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.5...v2.0.6)
+
+### 🩹 Fixes
+
+- Allow variables to be getter or ref ([747d9ed](https://github.com/Teages/nuxt-urql-client/commit/747d9ed))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.5
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.4...v2.0.5)
