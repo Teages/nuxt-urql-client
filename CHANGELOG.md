@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v2.0.7
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.6...v2.0.7)
+
+### 🩹 Fixes
+
+- Variables getter not work in useAsyncQuery ([0fa8b97](https://github.com/Teages/nuxt-urql-client/commit/0fa8b97))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.6
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.5...v2.0.6)
