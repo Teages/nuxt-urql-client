@@ -80,7 +80,7 @@ export function useAsyncQuery<
     requestPolicy: 'network-only',
     ...options?.context,
   }
-  return useAsyncData(key, () => useQuery(document, variables, context), options)
+  return useAsyncData(key, () => useQuery(document, toValue(variables), context), options)
 }
 
 export function useLazyAsyncQuery<

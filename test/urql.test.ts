@@ -11,6 +11,8 @@ describe('urql', async () => {
     const html = await $fetch('/hello')
     expect(html).toContain('AsyncQuery: hello, one')
     expect(html).toContain('Query: hello, two')
+    expect(html).toContain('AsyncWithGettersQuery: hello, three')
+    expect(html).toContain('AsyncWithComputedQuery: hello, four')
   })
 
   it('useMutation', async () => {
