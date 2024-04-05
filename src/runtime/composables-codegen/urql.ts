@@ -3,6 +3,7 @@ import { hash } from 'ohash'
 import type { KeysOf, PickFrom } from '#app/composables/asyncData'
 import { type AsyncData, type AsyncDataOptions, useAsyncData, useNuxtApp } from '#app'
 import type { ClientName } from '#build/urql-client/options'
+import { type MaybeRefOrGetter, toValue } from '#imports'
 
 export function useUrql(): { client: Client }
 export function useUrql(id: ClientName): { client: Client }
@@ -59,7 +60,7 @@ export function useAsyncQuery<
   DefaultT = null,
 >(
   document: DocumentInput<Data, Variables>,
-  variables?: Variables,
+  variables?: MaybeRefOrGetter<Variables>,
   options?: AsyncDataOptions<Data | undefined, DataT, PickKeys, DefaultT> & { context?: Partial<OperationContext> },
 ): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null>
 export function useAsyncQuery<
@@ -70,7 +71,7 @@ export function useAsyncQuery<
   DefaultT = DataT,
 >(
   document: DocumentInput<Data, Variables>,
-  variables?: Variables,
+  variables?: MaybeRefOrGetter<Variables>,
   options?: AsyncDataOptions<Data | undefined, DataT, PickKeys, DefaultT> & { context?: Partial<OperationContext> },
 ): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null> {
   const key = hash({ document, variables })
@@ -90,7 +91,7 @@ export function useLazyAsyncQuery<
   DefaultT = null,
 >(
   document: DocumentInput<ResT, Variables>,
-  variables?: Variables,
+  variables?: MaybeRefOrGetter<Variables>,
   options?: AsyncDataOptions<ResT | undefined, DataT, PickKeys, DefaultT> & { context?: Partial<OperationContext> },
 ): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null>
 export function useLazyAsyncQuery<
@@ -101,7 +102,7 @@ export function useLazyAsyncQuery<
   DefaultT = DataT,
 >(
   document: DocumentInput<ResT, Variables>,
-  variables?: Variables,
+  variables?: MaybeRefOrGetter<Variables>,
   options?: AsyncDataOptions<ResT | undefined, DataT, PickKeys, DefaultT> & { context?: Partial<OperationContext> },
 ): AsyncData<PickFrom<DataT, PickKeys> | DefaultT, CombinedError | null> {
   const key = hash({ document, variables })
@@ -110,7 +111,7 @@ export function useLazyAsyncQuery<
     requestPolicy: 'network-only',
     ...options?.context,
   }
-  return useAsyncData(key, () => useQuery(document, variables, context), {
+  return useAsyncData(key, () => useQuery(document, toValue(variables), context), {
     lazy: true,
     ...options,
   })
