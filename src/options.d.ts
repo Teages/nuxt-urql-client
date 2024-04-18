@@ -38,6 +38,15 @@ export interface UrqlModuleOptions {
        */
       nitro?: boolean
     }
+
+    /**
+     * @description The output directory for the generated files.
+     * If not provided, the files will be generated in the buildDir.
+     * The codegen runs on prepare dev and server start so you can add the dir to .gitignore
+     *
+     * @default undefined
+     */
+    outputDir?: string
   })
 }
 

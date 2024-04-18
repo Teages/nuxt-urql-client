@@ -1,11 +1,12 @@
-import fs from 'node:fs/promises'
+import fsp from 'node:fs/promises'
+import fs from 'node:fs'
 
 import type { Nuxt } from '@nuxt/schema'
 import { type Resolver, addTemplate, updateTemplates, useLogger } from '@nuxt/kit'
 
 import { defu } from 'defu'
 import { glob } from 'glob'
-import { normalize } from 'pathe'
+import { normalize, resolve } from 'pathe'
 import { ofetch } from 'ofetch'
 
 import { type IntrospectionQuery, buildClientSchema, getIntrospectionQuery, printSchema } from 'graphql'
@@ -38,6 +39,12 @@ export async function setupCodegen(
 
   const codegenCache = new Map<string, string>()
   const schemaCache = new Map<string, string>()
+
+  const optionsOutputDir = options.codegen?.outputDir
+  const outputDir = optionsOutputDir
+    ? resolve(nuxt.options.rootDir, optionsOutputDir)
+    : undefined
+  const templateResolver = useTemplateResolver(outputDir)
 
   const defaultConfig: UrqlModuleOptions['codegen'] = {
     config: {
@@ -114,7 +121,7 @@ export async function setupCodegen(
         return await generate({
           ignoreNoDocuments: true,
           generates: {
-            [`urql-client/codegen/${id}/`]: client,
+            [`${id}/`]: client,
           },
           pluckConfig: client.pluckConfig,
           silent: true,
@@ -131,11 +138,10 @@ export async function setupCodegen(
 
   // first run, then add templates to runtime
   const result = await codegen()
-  result.forEach(({ filename }) => addTemplate({
+  result.forEach(({ filename }) => templateResolver.addFile(
     filename,
-    getContents: () => codegenCache.get(filename) as string,
-    write: true,
-  }))
+    () => codegenCache.get(filename) as string,
+  ))
 
   const clients = Object.entries(options.clients)
 
@@ -152,7 +158,7 @@ export async function setupCodegen(
   const pushAutoImport = (names: string[], from: string, as?: string, type?: boolean) => {
     names.forEach((name) => {
       autoImportList.push({
-        from: `#build/urql-client/codegen/${from}`,
+        from: templateResolver.resolve(from),
         name,
         as,
         type,
@@ -166,14 +172,14 @@ export async function setupCodegen(
     const gqlTagName = client.gqlTagName ?? getGqlTagName(name)
 
     // generate gql tag with client id
-    addTemplate({
-      filename: `urql-client/codegen/${id}/gql-client.ts`,
-      getContents: () => [
+    templateResolver.addFile(
+      `${id}/gql-client.ts`,
+      () => [
+        `/* eslint-disable */`,
         `import { ${gqlTagName} as _${gqlTagName} } from './gql'`,
         `export const ${gqlTagName}: typeof _${gqlTagName} = (source: string) => ({ ...(_${gqlTagName}(source) as any), _client: '${id}' })`,
       ].join('\n'),
-      write: true,
-    })
+    )
 
     if (id === 'default') {
       pushAutoImport([gqlTagName], `${id}/gql-client`)
@@ -206,6 +212,11 @@ export async function setupCodegen(
     nuxt.hook('builder:watch', async (event, path) => {
       const resolvedPath = normalize(rootResolver.resolve(path))
 
+      // if the file in the outputDir, skip
+      if (outputDir && resolvedPath.startsWith(outputDir)) {
+        return
+      }
+
       const clients = await Promise.all(getClients.map(getClient => getClient()))
       const graphqlTags = clients.map(client => client.pluckConfig.globalGqlIdentifierName).flat()
 
@@ -214,7 +225,7 @@ export async function setupCodegen(
         .map(file => normalize(file))
 
       const changedFile = ['add', 'change'].includes(event)
-        ? await fs.readFile(resolvedPath, 'utf-8')
+        ? await fsp.readFile(resolvedPath, 'utf-8')
         : ''
 
       if (!(
@@ -233,9 +244,7 @@ export async function setupCodegen(
       logger.start(`GraphQL codegen: ${path}`)
       lock = fileHash
       await codegen()
-      await updateTemplates({
-        filter: ({ filename }) => filename.startsWith('urql-client/codegen/'),
-      })
+      await templateResolver.update()
       lock = undefined
     })
 
@@ -250,9 +259,7 @@ export async function setupCodegen(
           lock = nitroLock
 
           await codegen()
-          await updateTemplates({
-            filter: ({ filename }) => filename.startsWith('urql-client/codegen/'),
-          })
+          await templateResolver.update()
 
           lock = undefined
         })
@@ -289,4 +296,58 @@ function getDefaultDocuments() {
     `{${dirs.join(',')}}/**/*.{${exts.join(',')}}`,
     `*.{${exts.join(',')}}`,
   ]
+}
+
+function useTemplateResolver(
+  outputDir?: string,
+): TemplateResolver {
+  if (!outputDir) {
+    // use vfs
+    const pathPrefix = 'urql-client/codegen'
+    return {
+      addFile: (filename, getContents) => addTemplate({
+        filename: `${pathPrefix}/${filename}`,
+        getContents,
+        write: true,
+      }),
+      update: async () => updateTemplates({
+        filter: ({ filename }) => filename.startsWith(`${pathPrefix}/`),
+      }),
+      resolve: path => `#build/${pathPrefix}/${path}`,
+    }
+  }
+
+  const contentGetter = new Map<string, () => string>()
+
+  return {
+    addFile: (filename, getContents) => {
+      contentGetter.set(filename, getContents)
+
+      const path = resolve(outputDir, filename)
+      const content = getContents()
+
+      // check dir and write file
+      fs.mkdirSync(resolve(path, '..'), { recursive: true })
+      fs.writeFileSync(path, content, 'utf-8')
+    },
+    update: async () => {
+      const keys = Array.from(contentGetter.keys())
+      await Promise.all(keys.map(async (key) => {
+        const getContents = contentGetter.get(key)!
+        const content = getContents()
+
+        await fsp.writeFile(resolve(outputDir, key), content, 'utf-8')
+      }))
+    },
+    resolve: path => resolve(outputDir, path),
+  }
+}
+
+interface TemplateResolver {
+  addFile: (
+    filename: string,
+    getContents: () => string,
+  ) => void
+  update: () => Promise<void>
+  resolve: (path: string) => string
 }

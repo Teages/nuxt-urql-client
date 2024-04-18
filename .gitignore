@@ -55,3 +55,7 @@ test/**/gql
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Graphql Codegen build
+playground/.gql
+test/fixtures/codegen-outdir/.gql

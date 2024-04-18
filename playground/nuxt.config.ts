@@ -33,6 +33,9 @@ export default defineNuxtConfig({
       //   },
       // },
     },
+    codegen: {
+      outputDir: '.gql',
+    },
   },
   devtools: { enabled: true },
 })

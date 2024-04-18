@@ -4,6 +4,7 @@ export default antfu({
   ignores: [
     'dist',
     'node_modules',
+    'playground/.gql',
   ],
 }, {
   rules: {
