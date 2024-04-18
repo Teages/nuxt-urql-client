@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v2.0.8
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.6...v2.0.8)
+
+### 🩹 Fixes
+
+- Variables getter not work in useAsyncQuery ([0fa8b97](https://github.com/Teages/nuxt-urql-client/commit/0fa8b97))
+- Allow to change codegen output to avoid nuxt/nuxt#26648 ([#26648](https://github.com/Teages/nuxt-urql-client/issues/26648))
+
+### 🏡 Chore
+
+- **release:** V2.0.7 ([cb676bc](https://github.com/Teages/nuxt-urql-client/commit/cb676bc))
+- Upgrade deps ([d32899a](https://github.com/Teages/nuxt-urql-client/commit/d32899a))
+- Add test for outdir of codegen ([746e3dc](https://github.com/Teages/nuxt-urql-client/commit/746e3dc))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.7
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.6...v2.0.7)
