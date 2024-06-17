@@ -7,7 +7,7 @@ import { type MaybeRefOrGetter, toValue } from '#imports'
 
 export function useUrql(id: ClientName): UseUrqlReturn {
   const app = useNuxtApp()
-  const client = app.$urqlClients[id ?? 'default']
+  const client = app.$urql[id]
 
   return {
     client,

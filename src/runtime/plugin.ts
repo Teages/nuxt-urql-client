@@ -5,7 +5,7 @@ import type { ClientName } from '#build/urql-client/options'
 import { urqlModuleOptions as options } from '#build/urql-client/options'
 
 export default defineNuxtPlugin((nuxt) => {
-  const isClient = () => import.meta.client
+  const isClient = import.meta.client
 
   const getSsrKey = (id: string) => `__URQL_SSR_DATA__${id}__`
 
@@ -17,11 +17,9 @@ export default defineNuxtPlugin((nuxt) => {
      */
     const ssrKey = getSsrKey(id)
     const ssrStorage = useState<SSRData>(ssrKey)
-    const ssr = ssrExchange({
-      isClient: isClient(),
-    })
+    const ssr = ssrExchange({ isClient })
     // client side: restore data
-    if (isClient()) {
+    if (isClient) {
       nuxt.hook('app:created', () => {
         ssr.restoreData(ssrStorage.value)
       })
@@ -54,7 +52,7 @@ export default defineNuxtPlugin((nuxt) => {
       ],
       fetchOptions: () => {
         let cookie = ''
-        if (!isClient()) {
+        if (!isClient) {
           const headers = useRequestHeaders(['cookie'])
           const cookieList: string[] = []
           headers.cookie?.split(';')
@@ -110,14 +108,14 @@ export default defineNuxtPlugin((nuxt) => {
 
   return {
     provide: {
-      urqlClients: clients,
+      urql: clients,
     },
   }
 })
 
 declare module '#app' {
   interface NuxtApp {
-    $urqlClients: {
+    $urql: {
       [key in ClientName]: Client
     }
   }
