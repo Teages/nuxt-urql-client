@@ -12,8 +12,6 @@ export function useUrqlClient(event: H3Event, id: ClientName): Client {
   const {
     useDollarFetch = true,
     fetchOptions = {},
-    credentials = 'omit',
-    cookiesFilter = [],
   } = clientOptions
 
   return createClient({
@@ -22,46 +20,7 @@ export function useUrqlClient(event: H3Event, id: ClientName): Client {
       cacheExchange,
       fetchExchange,
     ],
-    fetchOptions: () => {
-      let cookie = ''
-      const cookies = getHeader(event, 'cookie')
-      const cookieList: string[] = []
-      cookies?.split(';')
-        .map(cookie => cookie.trim())
-        .forEach((val) => {
-          const [name, value] = val.split('=')
-          if (cookiesFilter?.includes(name)) {
-            cookieList.push(`${name}=${value}`)
-          }
-        })
-      cookie = cookieList.join('; ')
-
-      if (fetchOptions.headers) {
-        const userHeaders = fetchOptions.headers
-        if (Array.isArray(userHeaders)) {
-          for (const [key, value] of userHeaders) {
-            if (key.toLowerCase() === 'cookie') {
-              cookie += value
-            }
-          }
-        }
-        else if (userHeaders instanceof Headers) {
-          cookie += userHeaders.get('cookie') ?? ''
-        }
-        else {
-          cookie += userHeaders.cookie ?? ''
-        }
-      }
-
-      return {
-        ...fetchOptions,
-        credentials,
-        headers: {
-          ...fetchOptions.headers,
-          cookie,
-        },
-      }
-    },
+    fetchOptions,
     fetch: useDollarFetch
       ? (input, init) => $fetch.raw(
           input.toString(),

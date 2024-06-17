@@ -10,7 +10,7 @@ export interface UrqlModuleOptions {
   configDir?: string
 }
 
-export type ClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges'> & {
+export type ClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges' | 'fetchOptions'> & {
   /**
    * @description Rewrite the url in client side.
    */
@@ -28,11 +28,13 @@ export type ClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges'> & {
    * @description Allow json friendly data only.
    * It will be send to the client so don't put secret here.
    *
+   * It works in both vue app and nitro server.
+   *
    * @default {}
    */
   fetchOptions?: {
     headers?: Record<string, string>
-  }
+  } & RequestInit
 
   /**
    * @description The credentials policy you want to use for the fetch call.
@@ -47,7 +49,7 @@ export type ClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges'> & {
   /**
    * @description The list of cookies you want to send to the api.
    *
-   * This option is only works in server side (SSR).
+   * This option is only works in server side (Vue SSR).
    * See https://nuxt.com/docs/getting-started/data-fetching#passing-headers-and-cookies
    *
    * @default []
