@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v3.1.1
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v3.1.0...v3.1.1)
+
+### 🩹 Fixes
+
+- **build:** Config type error ([4104fa8](https://github.com/Teages/nuxt-urql-client/commit/4104fa8))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v3.1.0
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v3.0.0...v3.1.0)
