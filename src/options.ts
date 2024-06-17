@@ -44,7 +44,7 @@ export type ClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges' | 'fetchO
    *
    * @default 'omit'
    */
-  credentials?: RequestCredentials
+  credentials?: 'include' | 'omit' | 'same-origin'
 
   /**
    * @description The list of cookies you want to send to the api.
