@@ -5,7 +5,7 @@
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-A simple graphql (urql) client for Nuxt with codegen.
+A simple graphql (urql) client for Nuxt.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
 - ~~[Document: WIP](#)~~
@@ -44,6 +44,8 @@ export default defineNuxtConfig({
   },
 })
 ```
+
+> We suggest to use `@teages/nuxt-gql-client-codegen` to generate types for your graphql queries.
 
 ## Usage
 
