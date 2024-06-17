@@ -22,7 +22,7 @@ export type ClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges'> & {
    * @see https://nuxt.com/docs/api/utils/dollarfetch
    * @default true
    */
-  useBuildInFetch?: boolean
+  useDollarFetch?: boolean
 
   /**
    * @description Allow json friendly data only.

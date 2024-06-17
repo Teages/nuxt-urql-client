@@ -36,7 +36,7 @@ export default defineNuxtPlugin((nuxt) => {
       : clientOptions.url
 
     const {
-      useBuildInFetch = true,
+      useDollarFetch = true,
       fetchOptions = {},
       credentials = 'omit',
       cookiesFilter = [],
@@ -92,7 +92,7 @@ export default defineNuxtPlugin((nuxt) => {
           },
         }
       },
-      fetch: useBuildInFetch
+      fetch: useDollarFetch
         ? (input, init) => $fetch.raw(
             input.toString(),
             {
