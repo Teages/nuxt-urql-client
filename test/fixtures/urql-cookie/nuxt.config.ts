@@ -7,7 +7,7 @@ export default defineNuxtConfig({
       },
       auth: {
         url: 'https://graphql-test.teages.xyz/graphql-auth',
-        credentials: 'include',
+        credentials: 'same-origin',
         cookiesFilter: ['test_only'],
       },
     },

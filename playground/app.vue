@@ -1,17 +1,25 @@
 <script setup lang="ts">
-const queryUser = gqluser(/* GraphQL */`
-  query QueryUser {
-    user(id: "1") {
-      ...UserFragment
-    }
+const { useAsyncQuery } = useUrql('hello')
+
+const query = gql(`
+  query {
+    hello
   }
 `)
 
-const { data: userData } = await useAsyncQuery(queryUser)
+const { data, error, refresh } = await useAsyncQuery(query)
 </script>
 
 <template>
-  <div v-if="userData?.user">
-    <User :user="userData.user" />
+  <div>
+    <div v-if="error">
+      Error: {{ error }}
+    </div>
+    <div v-else>
+      {{ data }}
+    </div>
+    <button @click="() => refresh()">
+      Refresh
+    </button>
   </div>
 </template>

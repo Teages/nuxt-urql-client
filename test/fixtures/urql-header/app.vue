@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const query = gqlauth(/* GraphQL */`
+const { useAsyncQuery } = useUrql('auth')
+
+const query = gql(`
   query testHeader {
     authorization
   }

@@ -4,17 +4,13 @@ export default defineNuxtConfig({
     clients: {
       hello: {
         url: 'https://graphql-test.teages.xyz/graphql-hello',
-        credentials: 'include',
-        cookiesFilter: ['locale'],
-        fetchOptions: {
-          headers: {
-            Authorization: 'Bearer 123',
-          },
-        },
       },
       user: {
         url: 'https://graphql-test.teages.xyz/graphql-user',
-        credentials: 'include',
+      },
+      auth: {
+        url: 'https://graphql-test.teages.xyz/graphql-auth',
+        credentials: 'same-origin',
         cookiesFilter: ['locale'],
         fetchOptions: {
           headers: {
@@ -22,20 +18,8 @@ export default defineNuxtConfig({
           },
         },
       },
-      // auth: {
-      //   url: 'https://graphql-test.teages.xyz/graphql-auth',
-      //   credentials: 'include',
-      //   cookiesFilter: ['locale'],
-      //   fetchOptions: {
-      //     headers: {
-      //       Authorization: 'Bearer 123',
-      //     },
-      //   },
-      // },
-    },
-    codegen: {
-      outputDir: '.gql',
     },
   },
+
   devtools: { enabled: true },
 })

@@ -4,13 +4,6 @@ export default defineNuxtConfig({
     clients: {
       hello: {
         url: 'https://graphql-test.teages.xyz/graphql-hello',
-        credentials: 'include',
-        cookiesFilter: ['locale'],
-        fetchOptions: {
-          headers: {
-            Authorization: 'Bearer 123',
-          },
-        },
       },
     },
   },

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-const mutation = gqlhello(/* GraphQL */`
-  mutation testMutation($name: String!) {
+const { useMutation } = useUrql('hello')
+
+const mutation = gql(`
+  mutation TestMutation($name: String!) {
     helloAgain(name: $name)
   }
 `)

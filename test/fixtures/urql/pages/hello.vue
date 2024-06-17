@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const query = gqlhello(/* GraphQL */`
+const { useQuery, useAsyncQuery } = useUrql('hello')
+
+const query = gql(/* GraphQL */`
   query test($name: String!) {
     hello(name: $name)
   }

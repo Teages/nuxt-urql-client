@@ -33,14 +33,16 @@ export default defineNuxtPlugin((nuxt) => {
       })
     }
 
-    const useBuildInFetch = clientOptions.useBuildInFetch ?? true
-    const fetchOptions = clientOptions.fetchOptions ?? {}
-    const credentials = clientOptions.credentials ?? 'omit'
-    const cookiesFilter = clientOptions.cookiesFilter ?? []
-
     const url = import.meta.client && clientOptions.urlClient
       ? clientOptions.urlClient
       : clientOptions.url
+
+    const {
+      useBuildInFetch = true,
+      fetchOptions = {},
+      credentials = 'omit',
+      cookiesFilter = [],
+    } = clientOptions
 
     const client = createClient({
       ...clientOptions,
@@ -92,19 +94,15 @@ export default defineNuxtPlugin((nuxt) => {
           },
         }
       },
-      ...(
-        useBuildInFetch
-          ? {
-              fetch: (input, init) => $fetch.raw(
-                input.toString(),
-                {
-                  ...init as any,
-                  responseType: 'stream', // don't use the body
-                },
-              ),
-            }
-          : {}
-      ),
+      fetch: useBuildInFetch
+        ? (input, init) => $fetch.raw(
+            input.toString(),
+            {
+              ...init as any,
+              responseType: 'stream', // don't use the body
+            },
+          )
+        : undefined,
     })
 
     clients[id] = client
