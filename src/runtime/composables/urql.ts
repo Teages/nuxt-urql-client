@@ -7,17 +7,17 @@ import { type MaybeRefOrGetter, toValue } from '#imports'
 import type { ClientName } from '#build/types/urql-client'
 
 export function useUrql(id: ClientName): UseUrqlReturn {
-  const app = useNuxtApp()
-  const client = app.$urql[id]
+  const client = useNuxtApp().$urql[id]
 
   return {
     client,
-    ...buildComposables(client),
   }
 }
 
-function buildComposables(client: Client): Omit<UseUrqlReturn, 'client'> {
+export function useUrqlComposables(id: ClientName): UseUrqlComposablesReturn {
   const useQuery: UseQuery = async (document, variables, context) => {
+    const { client } = useUrql(id)
+
     const ans = await client.query(document, variables, context).toPromise()
     if (ans.error) {
       throw createUrqlError(ans.error)
@@ -27,6 +27,8 @@ function buildComposables(client: Client): Omit<UseUrqlReturn, 'client'> {
   }
 
   const useMutation: UseMutation = async (document, variables, context) => {
+    const { client } = useUrql(id)
+
     const ans = await client.mutation(document, variables as any, context).toPromise()
     if (ans.error) {
       throw createUrqlError(ans.error)
@@ -69,6 +71,9 @@ function createUrqlError(error: CombinedError) {
 
 export interface UseUrqlReturn {
   client: Client
+}
+
+export interface UseUrqlComposablesReturn {
   useQuery: UseQuery
   useMutation: UseMutation
   useAsyncQuery: UseAsyncQuery
