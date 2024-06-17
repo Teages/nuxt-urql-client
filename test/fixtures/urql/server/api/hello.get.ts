@@ -1,5 +1,3 @@
-import { gql } from '@urql/core'
-
 export default defineEventHandler(async (event) => {
   const client = useUrqlClient(event, 'hello')
 

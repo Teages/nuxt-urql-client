@@ -1,4 +1,4 @@
-import { addImportsDir, addPlugin, addServerImportsDir, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, updateRuntimeConfig, updateTemplates, useLogger } from '@nuxt/kit'
+import { addImports, addImportsDir, addPlugin, addServerImports, addServerImportsDir, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, updateRuntimeConfig, updateTemplates, useLogger } from '@nuxt/kit'
 import { globSync as glob } from 'glob'
 import { parse } from 'pathe'
 import type { UrqlModuleOptions } from './options'
@@ -13,6 +13,7 @@ export default defineNuxtModule<UrqlModuleOptions>({
   },
   defaults: {
     clients: {},
+    gql: true,
   },
   setup(options, nuxt) {
     const logger = useLogger('@teages/nuxt-urql-client')
@@ -45,6 +46,10 @@ export default defineNuxtModule<UrqlModuleOptions>({
 
     addImportsDir(resolve('./runtime/composables'))
     addImportsDir(resolve('./runtime/utils'))
+    if (options.gql ?? true) {
+      addImports({ name: 'gql', from: '@urql/core' })
+      addServerImports([{ name: 'gql', from: '@urql/core' }])
+    }
     addServerImportsDir(resolve('./runtime/server/utils'))
 
     // Config override

@@ -28,7 +28,7 @@ npm install --save-dev @teages/nuxt-urql-client graphql
 
 2. Add `@teages/nuxt-urql-client` to the `modules` section of `nuxt.config.ts`, and configure it:
 
-See [module options](/src/options.d.ts) for more options.
+See [module options](/src/options.ts) for more options.
 
 ```ts
 export default defineNuxtConfig({

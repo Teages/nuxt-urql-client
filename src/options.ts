@@ -8,6 +8,12 @@ export interface UrqlModuleOptions {
    * @default 'urql'
    */
   configDir?: string
+  /**
+   * Auto import `gql` to global. (Vue and nitro)
+   *
+   * @default true
+   */
+  gql?: boolean
 }
 
 export type ClientOptions = Omit<_ClientOptions, 'fetch' | 'exchanges' | 'fetchOptions'> & {
