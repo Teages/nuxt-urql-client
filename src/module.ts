@@ -1,4 +1,4 @@
-import { addImportsDir, addPlugin, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
+import { addImportsDir, addPlugin, addServerImportsDir, addTypeTemplate, createResolver, defineNuxtModule, updateRuntimeConfig, useLogger } from '@nuxt/kit'
 import type { UrqlModuleOptions } from './options'
 
 export default defineNuxtModule<UrqlModuleOptions>({
@@ -9,25 +9,29 @@ export default defineNuxtModule<UrqlModuleOptions>({
   defaults: {
     clients: {},
   },
-  setup(options) {
+  setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
-    // export options and its type to runtime plugin
-    addTemplate({
-      filename: 'urql-client/options.mjs',
-      getContents: () => `export const urqlModuleOptions = ${JSON.stringify(options)}`,
-    })
+    // export client name type
     addTypeTemplate({
-      filename: 'urql-client/options.d.ts',
+      filename: 'types/urql-client.d.ts',
       getContents: () => [
-        `import type { UrqlModuleOptions } from '${resolve('./options')}'`,
-        `export declare const urqlModuleOptions: UrqlModuleOptions`,
         `export type ClientName = ${
           Object.keys(options.clients).length === 0
             ? 'string'
             : Object.keys(options.clients).map(name => `'${name}'`).join(' | ')
         }`,
       ].join('\n'),
+    })
+    nuxt.options.nitro.alias = nuxt.options.nitro.alias ?? {}
+    nuxt.options.nitro.alias['#urql-clients'] = './types/urql-client'
+
+    updateRuntimeConfig({
+      public: {
+        urql: {
+          clients: options.clients,
+        },
+      },
     })
 
     // plugin
@@ -38,5 +42,8 @@ export default defineNuxtModule<UrqlModuleOptions>({
 
     // utils
     addImportsDir(resolve('./runtime/utils'))
+
+    // server
+    addServerImportsDir(resolve('./runtime/server/utils'))
   },
 })

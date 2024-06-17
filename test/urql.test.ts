@@ -19,4 +19,9 @@ describe('urql', async () => {
     const html = await $fetch('/again')
     expect(html).toContain('Mutation: hello two from mutation')
   })
+
+  it('server', async () => {
+    const data = await $fetch('/api/hello')
+    expect(data).toEqual({ hello: 'hello, server' })
+  })
 })

@@ -1,17 +1,20 @@
 import { cacheExchange, createClient, fetchExchange, ssrExchange } from '@urql/core'
 import type { Client, SSRData } from '@urql/core'
-import { defineNuxtPlugin, useRequestHeaders, useState } from '#app'
-import type { ClientName } from '#build/urql-client/options'
-import { urqlModuleOptions as options } from '#build/urql-client/options'
+import type { ClientOptions } from '../options'
+import { defineNuxtPlugin, useRequestHeaders, useRuntimeConfig, useState } from '#app'
+
+// @ts-expect-error type is not ready here
+import type { ClientName } from '#build/types/urql-client'
 
 export default defineNuxtPlugin((nuxt) => {
   const isClient = import.meta.client
 
   const getSsrKey = (id: string) => `__URQL_SSR_DATA__${id}__`
+  const clientsOptions = useRuntimeConfig().public.urql.clients as Record<string, ClientOptions>
 
   const clients: Record<string, Client> = {}
   // for each client, create a urql client
-  Object.entries(options.clients).forEach(([id, clientOptions]) => {
+  Object.entries(clientsOptions).forEach(([id, clientOptions]) => {
     /**
      * SSR Exchange
      */

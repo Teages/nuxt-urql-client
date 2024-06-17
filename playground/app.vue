@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { useAsyncQuery } = useUrql('hello')
+const { useAsyncQuery } = useUrql('auth')
 
 const query = gql(`
-  query {
-    hello
+  query Auth {
+    authorization
   }
 `)
 

@@ -1,9 +1,10 @@
 import type { AnyVariables, Client, CombinedError, DocumentInput, OperationContext } from '@urql/core'
 import { hash } from 'ohash'
-import type { ClientName } from '#build/urql-client/options'
 import type { KeysOf, PickFrom } from '#app/composables/asyncData'
 import { type AsyncData, type AsyncDataOptions, useAsyncData, useNuxtApp } from '#app'
 import { type MaybeRefOrGetter, toValue } from '#imports'
+// @ts-expect-error type is not ready here
+import type { ClientName } from '#build/types/urql-client'
 
 export function useUrql(id: ClientName): UseUrqlReturn {
   const app = useNuxtApp()
