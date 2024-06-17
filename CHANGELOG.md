@@ -1,6 +1,41 @@
 # Changelog
 
 
+## v3.0.0
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.8...v3.0.0)
+
+### 🚀 Enhancements
+
+- Urql client in nitro ([c05949e](https://github.com/Teages/nuxt-urql-client/commit/c05949e))
+- Config override in vue app ([de4b364](https://github.com/Teages/nuxt-urql-client/commit/de4b364))
+
+### 🩹 Fixes
+
+- Handling windows path ([e3ff0f8](https://github.com/Teages/nuxt-urql-client/commit/e3ff0f8))
+
+### 🏡 Chore
+
+- **release:** V2.0.8 ([1528c29](https://github.com/Teages/nuxt-urql-client/commit/1528c29))
+- ⚠️  Remove codegen ([27ed617](https://github.com/Teages/nuxt-urql-client/commit/27ed617))
+- ⚠️  Rename provide name ([17a4721](https://github.com/Teages/nuxt-urql-client/commit/17a4721))
+- ⚠️  Rename `useBuildInFetch` to `useDollarFetch` ([1f8952f](https://github.com/Teages/nuxt-urql-client/commit/1f8952f))
+- ⚠️  Limit header behavior in nitro for safety ([fe0fab3](https://github.com/Teages/nuxt-urql-client/commit/fe0fab3))
+- **lint:** Apply lint ([8fc4b0c](https://github.com/Teages/nuxt-urql-client/commit/8fc4b0c))
+- Using glob ([7f837cc](https://github.com/Teages/nuxt-urql-client/commit/7f837cc))
+- Avoid to using private name `RequestCredentials` ([053df06](https://github.com/Teages/nuxt-urql-client/commit/053df06))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Remove codegen ([27ed617](https://github.com/Teages/nuxt-urql-client/commit/27ed617))
+- ⚠️  Rename provide name ([17a4721](https://github.com/Teages/nuxt-urql-client/commit/17a4721))
+- ⚠️  Rename `useBuildInFetch` to `useDollarFetch` ([1f8952f](https://github.com/Teages/nuxt-urql-client/commit/1f8952f))
+- ⚠️  Limit header behavior in nitro for safety ([fe0fab3](https://github.com/Teages/nuxt-urql-client/commit/fe0fab3))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v2.0.8
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.6...v2.0.8)
