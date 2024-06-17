@@ -1,5 +1,5 @@
 import { type Client, cacheExchange, createClient, fetchExchange } from '@urql/core'
-import { type H3Event, getHeader } from 'h3'
+import type { H3Event } from 'h3'
 import type { ClientOptions } from '../../../options'
 // @ts-expect-error type is not ready here
 import type { ClientName } from '#urql-clients'
