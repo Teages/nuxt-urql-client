@@ -1,6 +1,8 @@
 import { cacheExchange, createClient, fetchExchange, ssrExchange } from '@urql/core'
-import type { Client, SSRData } from '@urql/core'
+import type { Client, SSRData, ClientOptions as UrqlClientOptions } from '@urql/core'
 import type { ClientOptions } from '../options'
+import type { DefineUrqlConfigInput } from '../utils/config'
+import * as overrides from '#build/urql-clients/override-options.client.mjs'
 import { defineNuxtPlugin, useRequestHeaders, useRuntimeConfig, useState } from '#app'
 
 // @ts-expect-error type is not ready here
@@ -45,7 +47,7 @@ export default defineNuxtPlugin((nuxt) => {
       cookiesFilter = [],
     } = clientOptions
 
-    const client = createClient({
+    const options = {
       ...clientOptions,
       url,
       exchanges: [
@@ -104,6 +106,17 @@ export default defineNuxtPlugin((nuxt) => {
             },
           )
         : undefined,
+    } satisfies UrqlClientOptions
+
+    // @ts-expect-error not typed
+    const overrideInput = overrides[id] as DefineUrqlConfigInput
+    const override = typeof overrideInput === 'function'
+      ? overrideInput(options)
+      : overrideInput
+
+    const client = createClient({
+      ...options,
+      ...override,
     })
 
     clients[id] = client
