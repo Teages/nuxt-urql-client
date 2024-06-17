@@ -1,9 +1,11 @@
 import { addImports, addImportsDir, addPlugin, addServerImports, addServerImportsDir, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, updateRuntimeConfig, updateTemplates, useLogger } from '@nuxt/kit'
 import { globSync as glob } from 'glob'
 import { parse } from 'pathe'
-import type { UrqlModuleOptions } from './options'
+import type { UrqlModuleOptions as ModuleOptions } from './options'
 
-export default defineNuxtModule<UrqlModuleOptions>({
+export type { ModuleOptions }
+
+export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: '@teages/nuxt-urql-client',
     configKey: 'urqlClient',
