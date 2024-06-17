@@ -54,7 +54,7 @@ export default defineNuxtModule<UrqlModuleOptions>({
       getContents: () => Object.keys(options.clients).map((id) => {
         const override = [...overrides].find(o => o.id === id && o.type === 'client')
         if (override) {
-          const path = override.path.replace(/\.(ts|js|mjs|mts)$/, '')
+          const path = resolve(override.path.replace(/\.(ts|js|mjs|mts)$/, ''))
           return `export { default as ${id} } from '${path}'`
         }
         else {
