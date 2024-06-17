@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v3.1.0
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v3.0.0...v3.1.0)
+
+### 🚀 Enhancements
+
+- Make auto-import `gql` optional ([c4f81ba](https://github.com/Teages/nuxt-urql-client/commit/c4f81ba))
+
+### 🏡 Chore
+
+- Update README.md ([4d66003](https://github.com/Teages/nuxt-urql-client/commit/4d66003))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v3.0.0
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v2.0.8...v3.0.0)
