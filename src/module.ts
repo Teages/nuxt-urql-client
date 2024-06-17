@@ -1,5 +1,5 @@
 import { addImportsDir, addPlugin, addServerImportsDir, addTemplate, addTypeTemplate, createResolver, defineNuxtModule, updateRuntimeConfig, updateTemplates, useLogger } from '@nuxt/kit'
-import { globSync as glob } from 'fast-glob'
+import { globSync as glob } from 'glob'
 import { parse } from 'pathe'
 import type { UrqlModuleOptions } from './options'
 
