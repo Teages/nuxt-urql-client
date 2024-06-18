@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { useMutation } = useUrql('hello')
+const { useMutation } = useUrqlComposables('hello')
 
 const mutation = gql(`
   mutation TestMutation($name: String!) {

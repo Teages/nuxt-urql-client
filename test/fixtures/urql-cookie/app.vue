@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { useAsyncQuery } = useUrql('auth')
+const { useAsyncQuery } = useUrqlComposables('auth')
 
 const query = gql(`
   query testCookie {
