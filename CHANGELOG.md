@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v3.1.2
+
+[compare changes](https://github.com/Teages/nuxt-urql-client/compare/v3.1.1...v3.1.2)
+
+### 🩹 Fixes
+
+- Put off `useNuxtApp` to make composables exportable ([1e5d67d](https://github.com/Teages/nuxt-urql-client/commit/1e5d67d))
+- Update tests ([aeb1158](https://github.com/Teages/nuxt-urql-client/commit/aeb1158))
+
+### ❤️ Contributors
+
+- Teages ([@Teages](http://github.com/Teages))
+
 ## v3.1.1
 
 [compare changes](https://github.com/Teages/nuxt-urql-client/compare/v3.1.0...v3.1.1)
